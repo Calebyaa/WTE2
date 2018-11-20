@@ -6,32 +6,38 @@
 #ifndef WTE_MAIN
 static const struct
 {
-    float x, y, z;
-    float r, g, b;
+    float x, y, z, w;
+    float r, g, b, a;
 } vertices[3] =
 {
-    {-0.6f, -0.4f, 0.0f, 1.0f, 0.0f, 0.0f},
-    { 0.6f, -0.4f, 0.0f, 0.0f, 1.0f, 0.0f},
-    { 0.0f,  0.6f, 0.0f, 0.0f, 0.0f, 1.0f}
+    {-0.6f, -0.4f, 0.0f, 1.0f,
+      1.0f,  0.0f, 0.0f, 1.0f },
+    { 0.6f, -0.4f, 0.0f, 1.0f,
+      0.0f,  1.0f, 0.0f, 1.0f },
+    { 0.0f,  0.6f, 0.0f, 1.0f,
+      0.0f,  0.0f, 1.0f, 1.0f }
 };
 
-static const char* vertex_shader_text =
-"uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
+static const char* vertexShaderSource =
+"#version 430 core\n"
+"uniform mat4 mvp;\n"
+"attribute vec4 vertexPosition;\n"
+"attribute vec4 vertexColor;\n"
+"out vec4 color;\n"
 "void main()\n"
 "{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
+"    gl_Position = mvp * vertexPosition;\n"
+"    color = vertexColor;\n"
 "}\n";
 
-static const char* fragment_shader_text =
-"varying vec3 color;\n"
+static const char* fragmentShaderSource =
+"#version 430 core\n"
+"in vec4 color;\n"
 "void main()\n"
 "{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
+"    gl_FragColor = color;\n"
 "}\n";
+
 
 int main() {
 
@@ -55,6 +61,36 @@ int main() {
     glfwSwapInterval(0);
 
     glClearColor(0.96f, 0.36f, 0.15f, 1.0f);
+
+    // create your buffers
+    GLuint vertexBuffer, vert, frag, program;
+    GLint mvpLocation, vertexPositionLocation, vertexColorLocation;
+
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    vert = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vert, 1, &vertexShaderSource, NULL);
+    glCompileShader(vert);
+    
+    frag = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(frag, 1, &fragmentShaderSource, NULL);
+    glCompileShader(frag);
+
+    program = glCreateProgram();
+    glAttachShader(program, vert);
+    glAttachShader(program, frag);
+    glLinkProgram(program);
+
+    mvpLocation = glGetUniformLocation(program, "mvp");
+    vertexPositionLocation = glGetAttribLocation(program, "vertexPosition");
+    vertexColorLocation = glGetAttribLocation(program, "vertexColor");
+
+    glEnableVertexAttribArray(vertexPositionLocation);
+    glVertexAttribPointer(vertexPositionLocation, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)0);
+    glEnableVertexAttribArray(vertexColorLocation);
+    glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(sizeof(float) * 4));
 
     // simplest draw loop, maybe?
     do {
