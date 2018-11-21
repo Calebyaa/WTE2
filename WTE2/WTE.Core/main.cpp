@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -9,19 +10,31 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #ifndef WTE_MAIN
-static const struct
-{
-    float x, y, z, w;
-    float r, g, b, a;
-} vertices[3] =
-{
-    {-0.6f, -0.4f, 0.0f, 1.0f,
-      1.0f,  0.0f, 0.0f, 1.0f },
-    { 0.6f, -0.4f, 0.0f, 1.0f,
-      0.0f,  1.0f, 0.0f, 1.0f },
-    { 0.0f,  0.6f, 0.0f, 1.0f,
-      0.0f,  0.0f, 1.0f, 1.0f }
+//static const struct
+//{
+//    float x, y, z, w;
+//    float r, g, b, a;
+//} vertices[3] =
+//{
+//    {-0.6f, -0.4f, 0.0f, 1.0f,
+//      1.0f,  0.0f, 0.0f, 1.0f },
+//    { 0.6f, -0.4f, 0.0f, 1.0f,
+//      0.0f,  1.0f, 0.0f, 1.0f },
+//    { 0.0f,  0.6f, 0.0f, 1.0f,
+//      0.0f,  0.0f, 1.0f, 1.0f }
+//};
+
+std::vector<glm::vec4> vertices{ 
+    {-0.6f, -0.4f, 0.0f, 1.0f },
+    { 0.6f, -0.4f, 0.0f, 1.0f },
+    { 0.0f,  0.6f, 0.0f, 1.0f }
 };
+std::vector<glm::vec4> vertexColors{
+    { 1.0f,  0.0f, 0.0f, 1.0f },
+    { 0.0f,  1.0f, 0.0f, 1.0f },
+    { 0.0f,  0.0f, 1.0f, 1.0f }
+};
+
 
 static const char* vertexShaderSource =
 "#version 430 core\n"
@@ -69,25 +82,12 @@ int main() {
     glClearColor(0.96f, 0.36f, 0.15f, 1.0f);
 
     // create your buffers
-    GLuint vertexBuffer, vert, frag, program;
+    GLuint vertexBuffer, vertColorBuffer, vert, frag, program;
     GLint mvpLocation, vertexPositionLocation, vertexColorLocation;
 
     GLuint vaoId;
     glGenVertexArrays(1, &vaoId);
     glBindVertexArray(vaoId);
-
-    // this should be spread out in to two buffers.
-    // though I'm not actually likely to keep using it at all.
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);   
-    glEnableVertexAttribArray(vertexPositionLocation);
-    glVertexAttribPointer(vertexPositionLocation, 4, GL_FLOAT, GL_FALSE,
-        sizeof(float) * 8, (void*)0);    
-    glEnableVertexAttribArray(vertexColorLocation);
-    glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE,
-        sizeof(float) * 8, (void*)(sizeof(float) * 4));
-
 
     vert = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vert, 1, &vertexShaderSource, NULL);
@@ -105,6 +105,22 @@ int main() {
     mvpLocation = glGetUniformLocation(program, "mvp");
     vertexPositionLocation = glGetAttribLocation(program, "vertexPosition");
     vertexColorLocation = glGetAttribLocation(program, "vertexColor");
+
+    // this should be spread out in to two buffers.
+    // though I'm not actually likely to keep using it at all.
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(vertexPositionLocation);
+    glVertexAttribPointer(vertexPositionLocation, 4, GL_FLOAT, GL_FALSE,
+        sizeof(float) * 4, (void*)0);
+
+    glGenBuffers(1, &vertColorBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertColorBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexColors), vertexColors.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(vertexColorLocation);
+    glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE,
+        sizeof(float) * 4, (void*)0);
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
