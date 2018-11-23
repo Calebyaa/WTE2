@@ -9,126 +9,109 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #ifndef WTE_MAIN
-static const struct
-{
-    float x, y, z, w;
-    float r, g, b, a;
-} vertices[3] =
-{
-    {-0.6f, -0.4f, 0.0f, 1.0f,
-      1.0f,  0.0f, 0.0f, 1.0f },
-    { 0.6f, -0.4f, 0.0f, 1.0f,
-      0.0f,  1.0f, 0.0f, 1.0f },
-    { 0.0f,  0.6f, 0.0f, 1.0f,
-      0.0f,  0.0f, 1.0f, 1.0f }
-};
 
-static const char* vertexShaderSource =
-"#version 430 core\n"
-"uniform mat4 mvp;\n"
-"in vec4 vertexPosition;\n"
-"in vec4 vertexColor;\n"
-"out vec4 color;\n"
-"void main()\n"
-"{\n"
-"    gl_Position = mvp * vertexPosition;\n"
-"    color = vertexColor;\n"
-"}\n";
+GLuint compile_shaders() {
+    GLuint vertex_shader;
+    GLuint fragment_shader;
+    GLuint program;
 
-static const char* fragmentShaderSource =
-"#version 430 core\n"
-"in vec4 color;\n"
-"void main()\n"
-"{\n"
-"    gl_FragColor = color;\n"
-"}\n";
+    static const GLchar* vertex_shader_source[]{
+        "#version 450 core                              \n"
+        "                                               \n"
+        "void main() {                                  \n"
+        "    gl_position = vec4(0.0, 0.0, 0.5, 1.0);    \n"
+        "}                                              \n"
+    };
 
+    static const GLchar* fragment_shader_source[]{
+        "#version 450 core                              \n"
+        "                                               \n"
+        "out vec4 color;                                \n"
+        "                                               \n"
+        "void main() {                                  \n"
+        "    color = vec4(1.0, 1.0, 1.0, 1.0);          \n"
+        "}"
+    };
+
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, vertex_shader_source, NULL);
+    glCompileShader(vertex_shader);
+
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, fragment_shader_source, NULL);
+    glCompileShader(fragment_shader);
+
+
+
+    program = glCreateProgram();
+    glAttachShader(program, vertex_shader);
+    glAttachShader(program, fragment_shader);
+    glLinkProgram(program);
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+
+    auto error = glGetError();
+    return program;
+}
+
+static GLuint rendering_program;
+static GLuint vertex_array_object;
+
+void startup() {
+    rendering_program = compile_shaders();
+    glCreateVertexArrays(1, &vertex_array_object);
+    glBindVertexArray(vertex_array_object);
+}
+
+void shutdown() {
+    glDeleteVertexArrays(1, &vertex_array_object);
+    glDeleteProgram(rendering_program);
+}
+
+void render() {
+
+    glClearColor(1.0f, 0.5f, 0.25f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(rendering_program);
+    glDrawArrays(GL_POINTS, 0, 1);
+}
 
 int main() {
-
+    GLFWwindow* window;
+    
     if (!glfwInit()) {
         exit(EXIT_FAILURE);
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    //glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    auto window = glfwCreateWindow(1600, 900, "Working Title Engine 2", NULL, NULL);
-
-    if (nullptr == window) {
+    window = glfwCreateWindow(1600, 900, "Working Title Engine 2", NULL, NULL);
+    if (!window)
+    {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
-
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    glClearColor(0.96f, 0.36f, 0.15f, 1.0f);
+    startup();
 
-    // create your buffers
-    GLuint vertexBuffer, vert, frag, program;
-    GLint mvpLocation, vertexPositionLocation, vertexColorLocation;
+    glPointSize(40.0f);
 
-    GLuint vaoId;
-    glGenVertexArrays(1, &vaoId);
-    glBindVertexArray(vaoId);
-
-    // this should be spread out in to two buffers.
-    // though I'm not actually likely to keep using it at all.
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);   
-    glEnableVertexAttribArray(vertexPositionLocation);
-    glVertexAttribPointer(vertexPositionLocation, 4, GL_FLOAT, GL_FALSE,
-        sizeof(float) * 8, (void*)0);    
-    glEnableVertexAttribArray(vertexColorLocation);
-    glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE,
-        sizeof(float) * 8, (void*)(sizeof(float) * 4));
-
-
-    vert = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vert, 1, &vertexShaderSource, NULL);
-    glCompileShader(vert);
     
-    frag = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(frag, 1, &fragmentShaderSource, NULL);
-    glCompileShader(frag);
-
-    program = glCreateProgram();
-    glAttachShader(program, vert);
-    glAttachShader(program, frag);
-    glLinkProgram(program);
-
-    mvpLocation = glGetUniformLocation(program, "mvp");
-    vertexPositionLocation = glGetAttribLocation(program, "vertexPosition");
-    vertexColorLocation = glGetAttribLocation(program, "vertexColor");
-
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    auto ratio = width / (float)height;
-
-    glViewport(0, 0, width, height);
-
-    glm::mat4x4 m(1.0f);
-    glm::mat4x4 p = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f);
-    glm::mat4x4 mvp = p * m;
-    glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, (const GLfloat*)glm::value_ptr(mvp));
-
-    glUseProgram(program);
 
     do {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        render();
         glfwSwapBuffers(window);
         glfwPollEvents();
-    } while (!glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS);
+    } while (!glfwWindowShouldClose(window));
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
+    shutdown();
 }
 
 #endif // !WTE_MAIN
