@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <wte/graphics/graphics.h>
+
 #ifndef WTE_MAIN
 
 GLuint compile_shaders() {
@@ -21,7 +23,7 @@ GLuint compile_shaders() {
         "void main() {                                                       \n"
         "    const vec4 vertices[3] = vec4[3](vec4(-0.25, -0.25, 0.5, 1.0),  \n"
         "                                     vec4( 0.25, -0.25, 0.5, 1.0),  \n"
-        "                                     vec4( 0.25,  0.25, 0.5, 1.0)); \n"
+        "                                     vec4(  0.0,  0.25, 0.5, 1.0)); \n"
         "    gl_Position = vertices[gl_VertexID];                            \n"
         "}                                                                   \n"
     };
