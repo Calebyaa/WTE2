@@ -19,20 +19,20 @@ GLuint compile_shaders() {
         "#version 450 core                                                   \n"
         "                                                                    \n"
         "void main() {                                                       \n"
-        "    const vec4 vertices[3] = vec4[3](vec4(-25.0, -25.0, 5.0, 1.0),  \n"
-        "                                     vec4( 25.0, -25.0, 5.0, 1.0),  \n"
-        "                                     vec4( 25.0,  25.0, 5.0, 1.0)); \n"
-        "    gl_position = vertices[gl_VertexID];                            \n"
+        "    const vec4 vertices[3] = vec4[3](vec4(-0.25, -0.25, 0.5, 1.0),  \n"
+        "                                     vec4( 0.25, -0.25, 0.5, 1.0),  \n"
+        "                                     vec4( 0.25,  0.25, 0.5, 1.0)); \n"
+        "    gl_Position = vertices[gl_VertexID];                            \n"
         "}                                                                   \n"
     };
 
     static const GLchar* fragment_shader_source[]{
-        "#version 450 core                                                  \n"
-        "                                                                   \n"
-        "out vec4 color;                                                    \n"
-        "                                                                   \n"
-        "void main() {                                                      \n"
-        "    color = vec4(1.0, 1.0, 1.0, 1.0);                              \n"
+        "#version 450 core                                                   \n"
+        "                                                                    \n"
+        "out vec4 color;                                                     \n"
+        "                                                                    \n"
+        "void main() {                                                       \n"
+        "    color = vec4(1.0, 1.0, 1.0, 1.0);                               \n"
         "}"
     };
 
@@ -104,10 +104,6 @@ int main() {
     glfwSwapInterval(1);
 
     startup();
-
-    //glPointSize(40.0f);
-
-    
 
     do {
         render();
