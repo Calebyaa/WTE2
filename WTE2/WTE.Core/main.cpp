@@ -9,6 +9,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <wte/graphics/graphics.h>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
 #ifndef WTE_MAIN
 
@@ -41,19 +43,17 @@ GLuint compile_shaders() {
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
-    auto error = glGetError();
 
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
-error = glGetError();
 
 
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
-error = glGetError();
+
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 

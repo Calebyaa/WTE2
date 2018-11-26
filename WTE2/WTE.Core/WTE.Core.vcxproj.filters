@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{1103ed9e-2084-4375-842d-b2e1fbafd623}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\libwte">
+      <UniqueIdentifier>{c3d7a440-464a-4483-a240-bf8c05a350ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\libwte\graphics">
+      <UniqueIdentifier>{f10a6990-29e2-475c-8919-9517e2ca5b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{d1461d9f-9a7c-4e06-b430-7da50dc739d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\graphics">
+      <UniqueIdentifier>{4465eec4-f87a-4c15-8c67-27380aa08234}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,5 +36,13 @@
     <ClCompile Include="src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\libwte\source\graphics\graphics.cpp">
+      <Filter>source\graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libwte\headers\wte\graphics\graphics.h">
+      <Filter>headers\libwte\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
