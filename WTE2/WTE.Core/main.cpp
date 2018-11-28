@@ -61,7 +61,9 @@ GLuint compile_shaders() {
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
 
+    glDetachShader(program, vertex_shader);
     glDeleteShader(vertex_shader);
+    glDetachShader(program, fragment_shader);
     glDeleteShader(fragment_shader);
 
     return program;
@@ -172,9 +174,19 @@ int main() {
         glfwPollEvents();
     } while (!glfwWindowShouldClose(window));
 
+    // now clean up your shit, Todd
+
     // TODO: should probably be cleaning up my buffers here, too.
-    glDeleteVertexArrays(1, &vertex_array_object);
+    glUseProgram(0);
+    glDisableVertexAttribArray(vert_loc);
+    glDisableVertexAttribArray(color_loc);
     glDeleteProgram(rendering_program);
+    glDeleteBuffers(1, &vbo_vert);
+    glDeleteBuffers(1, &vbo_color);
+    glDeleteVertexArrays(1, &vertex_array_object);
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    exit(EXIT_SUCCESS);
 }
 
 #endif // !WTE_MAIN
