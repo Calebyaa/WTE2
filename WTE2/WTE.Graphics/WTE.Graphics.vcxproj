@@ -71,23 +71,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../libwte/headers;$(SolutionDir)..\Externals\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Externals\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)..\Externals\lib\$(IntDir);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)lib\$(IntDir)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../libwte/headers;$(SolutionDir)..\Externals\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Externals\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)..\Externals\lib\$(IntDir);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)lib\$(IntDir)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>../libwte/headers;$(SolutionDir)..\Externals\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Externals\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)..\Externals\lib\$(IntDir);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)lib\$(IntDir)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>../libwte/headers;$(SolutionDir)..\Externals\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Externals\lib\$(Configuration);$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)..\Externals\lib\$(IntDir);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)lib\$(IntDir)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libwte\source\graphics\graphics.cpp" />
+    <ClCompile Include="src\glad.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
