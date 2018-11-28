@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WTE.Core", "WTE.Core\WTE.Core.vcxproj", "{3CAE2DAD-76CA-483D-BE6E-CE8CC0265EED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WTE.Graphics", "WTE.Graphics\WTE.Graphics.vcxproj", "{8FE10931-D272-4A03-955D-AF392BCF8C36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{3CAE2DAD-76CA-483D-BE6E-CE8CC0265EED}.Release|x64.Build.0 = Release|x64
 		{3CAE2DAD-76CA-483D-BE6E-CE8CC0265EED}.Release|x86.ActiveCfg = Release|Win32
 		{3CAE2DAD-76CA-483D-BE6E-CE8CC0265EED}.Release|x86.Build.0 = Release|Win32
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Debug|x64.ActiveCfg = Debug|x64
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Debug|x64.Build.0 = Debug|x64
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Debug|x86.ActiveCfg = Debug|Win32
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Debug|x86.Build.0 = Debug|Win32
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Release|x64.ActiveCfg = Release|x64
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Release|x64.Build.0 = Release|x64
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Release|x86.ActiveCfg = Release|Win32
+		{8FE10931-D272-4A03-955D-AF392BCF8C36}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

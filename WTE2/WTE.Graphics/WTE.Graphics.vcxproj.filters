@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{0a97d33a-471a-4e64-b014-a377943c8afb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\wte">
+      <UniqueIdentifier>{fc01a1a8-43e0-4bb1-b17f-2b60d9d74ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\wte\graphics">
+      <UniqueIdentifier>{3233e1a3-852d-4e7e-9d93-3357c90d4aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{7545d11d-8ffa-49d5-9080-a74a9c5eaabe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\graphics">
+      <UniqueIdentifier>{c8d586df-14a8-4239-a188-257e4bcd1e44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libwte\headers\wte\graphics\graphics.h">
+      <Filter>headers\wte\graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libwte\source\graphics\graphics.cpp">
+      <Filter>source\graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
