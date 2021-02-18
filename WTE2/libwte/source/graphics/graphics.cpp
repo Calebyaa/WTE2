@@ -18,14 +18,14 @@ void wte::graphics::Renderer::Start() {
 
     // TODO: should be parameterized. Perhaps by some sort of struct?
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // TODO: Also parameterized, but the window handle is the return. Maybe.
     //       Alternate options include:
     //           -> only supporting one window
     //           -> generating a handle to the window and obfuscating the pointer
-    window_ = glfwCreateWindow(1600, 900, "Working Title Engine 2", NULL, NULL);
+    window_ = glfwCreateWindow(1920, 1080, "Working Title Engine 2", NULL, NULL);
     if (!window_)
     {
         glfwTerminate();
@@ -67,39 +67,38 @@ void wte::graphics::Renderer::Start() {
     //GLuint vertex_array_object;
     //GLuint vbo_vert, vbo_color;
     
-    CompileShaders();
+    CompileShaders_();
 
     // TODO: Allow for easy creation of these per shad prog?
     //       Or maybe it's the responsibility of the programmer to set it up?
     //       For sure requires research.
     // TODO: More research on what other engines do, baby.
-    //GLint vert_loc, color_loc;
-    loc_pos_ = glGetAttribLocation(prog_, "position");
-    loc_col_ = glGetAttribLocation(prog_, "color");
+    position_attribute_location_ = glGetAttribLocation(program_, "position");
+    color_attribute_location_ = glGetAttribLocation(program_, "color");
 
     // TODO: this should be 1 VAO per geometry.
     //       each VAO should define the requisite VBOs.
     glCreateVertexArrays(1, &(vao_));
     glBindVertexArray(vao_);
 
-    glCreateBuffers(1, &(vbo_pos_));
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_pos_);
+    glCreateBuffers(1, &(vbo_vertices_));
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices_);
     glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), verts.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(loc_pos_, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(loc_pos_);
+    glVertexAttribPointer(position_attribute_location_, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(position_attribute_location_);
 
-    glCreateBuffers(1, &(vbo_col_));
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_col_);
+    glCreateBuffers(1, &(vbo_colors_));
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors_);
     glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), colors.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(loc_col_, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(loc_col_);
+    glVertexAttribPointer(color_attribute_location_, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(color_attribute_location_);
 
-    glUseProgram(prog_);
+    glUseProgram(program_);
 
     // TODO: should be added to the GL configurable stuff,
     //       but should be set-able per-buffer (once FBOs get
     //       into the mix)
-    glClearColor(1.0f, 0.5f, 0.25f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 bool wte::graphics::Renderer::Render() {
@@ -116,17 +115,17 @@ bool wte::graphics::Renderer::Render() {
 
 void wte::graphics::Renderer::Shutdown() {
     glUseProgram(0);
-    glDisableVertexAttribArray(loc_pos_);
-    glDisableVertexAttribArray(loc_col_);
-    glDeleteProgram(prog_);
-    glDeleteBuffers(1, &vbo_pos_);
-    glDeleteBuffers(1, &vbo_col_);
+    glDisableVertexAttribArray(position_attribute_location_);
+    glDisableVertexAttribArray(color_attribute_location_);
+    glDeleteProgram(program_);
+    glDeleteBuffers(1, &vbo_vertices_);
+    glDeleteBuffers(1, &vbo_colors_);
     glDeleteVertexArrays(1, &vao_);
     glfwDestroyWindow(window_);
     glfwTerminate();
 }
 
-void wte::graphics::Renderer::CompileShaders() {
+void wte::graphics::Renderer::CompileShaders_() {
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint program;
@@ -178,5 +177,5 @@ void wte::graphics::Renderer::CompileShaders() {
     glDetachShader(program, fragment_shader);
     glDeleteShader(fragment_shader);
 
-    prog_ = program;
+    program_ = program;
 }

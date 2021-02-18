@@ -18,10 +18,10 @@ public:
 
 private:
     GLFWwindow* window_;
-    GLuint vao_, vbo_pos_, vbo_col_, prog_;
-    GLint loc_pos_, loc_col_;
+    GLuint vao_, vbo_vertices_, vbo_colors_, program_;
+    GLint position_attribute_location_, color_attribute_location_;
 
-    void CompileShaders();
+    void CompileShaders_();
 };
 
 }
